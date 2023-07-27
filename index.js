@@ -1,9 +1,11 @@
 const { Builder, By, Key, until } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 require("dotenv").config();
+const { analyze } = require("./data.js");
 
 const username = process.env.IRIS_USERNAME;
 const password = process.env.IRIS_PASSWORD;
+const GYAN_REVIEW_PAGE_HOLD = 2;
 
 async function sleep(timeInS) {
   await new Promise((resolve) => setTimeout(resolve, timeInS * 1000));
@@ -38,21 +40,21 @@ async function setup() {
     finalData.push(data);
   }
 
-  const mca_data = [];
-  const company_data_map = [];
+  const gyan_review_links = [];
+  const company_data = [];
   finalData.forEach((val) => {
     if (val.includes("M C A"))
       if (!val.includes("Gyan not filled yet!")) {
-        mca_data.push(val[6]);
+        gyan_review_links.push(val[6]);
       } else {
-        company_data_map.push({ company: val[3], role: "", location: "" });
+        company_data.push({ company: val[3], role: "", location: "" });
       }
   });
 
-  for (const val of mca_data) {
+  for (const val of gyan_review_links) {
     console.log(val);
     await driver.navigate().to(val);
-    await sleep(5);
+    // await sleep(GYAN_REVIEW_PAGE_HOLD);
     const company = await driver
       .findElement(
         By.css(
@@ -75,10 +77,10 @@ async function setup() {
         )
       )
       .getText();
-    company_data_map.push({ company, role, location });
+    company_data.push({ company, role, location });
   }
 
-  console.log(company_data_map);
+  analyze(company_data);
   await driver.quit();
 }
 
