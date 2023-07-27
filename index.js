@@ -19,7 +19,7 @@ async function setup() {
     .findElement(By.id("user_password"))
     .sendKeys(password, Key.RETURN);
   // Filter data manually during this time
-  await sleep(20);
+  await sleep(30);
 
   const table = await driver.findElement(By.id("icList"));
   const rows = await table.findElements(By.css("tr"));
