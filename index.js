@@ -45,9 +45,9 @@ async function setup() {
   finalData.forEach((val) => {
     if (val.includes("M C A"))
       if (!val.includes("Gyan not filled yet!")) {
-        gyan_review_links.push(val[6]);
+        gyan_review_links.push(val[7]);
       } else {
-        company_data.push({ company: val[3], role: "", location: "" });
+        company_data.push({ company: val[4], role: "", location: "" });
       }
   });
 
